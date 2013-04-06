@@ -1,0 +1,513 @@
+<head>
+  <title>isotope-meteor</title>
+  <!-- link rel="stylesheet" href="./css/style.css" / -->
+  
+</head>
+
+<!-- body>
+  
+  {{> page}}
+  {{> todos}}
+  {{> todo_item }}
+  {{> tag_filter }}
+</body -->
+
+
+
+<!-- template name="page">
+  < h1>Advanced Template Demo</h1>
+  <p>
+    This demo shows off the advanced features of Meteor's optional
+    Spark-based templating system, including constant regions, node
+    preservation, per-template state, and template lifecycle
+    callbacks.
+  </p>
+  {{ > hello }}
+  {{ > preserveDemo }}
+  {{ > stateDemo }}
+  {{ > d3Demo }} 
+  
+  {{ > isotope }}
+</template -->
+
+<!-- template name="hello">
+  <h1>Hello World!</h1>
+  {{greeting}}
+  <div class="greeting">Hello there, {{first}} {{last}}!</div>
+  <input type="button" value="Click" />
+</template>
+
+<template name="preserveDemo">
+  <h2>Element preservation</h2>
+
+  <input type="button" value="X++" class="x">
+
+  <p>
+    Elements can be <em>preserved</em>, meaning that they will not be
+    disturbed even as their attributes, children, or siblings
+    change. In this example, when you press the X++ button, the CSS
+    animation continues uninterrupted.
+  </p>
+
+
+X={{x}}<br>
+  <div class="spinner" style="-webkit-animation: {{spinAnim}} 2s infinite linear">
+    X={{x}}
+  </div>
+  <div>
+    <input type="checkbox" class="spinforward" {{spinForwardChecked}}>
+    Spin Forward
+  </div>
+  X={{x}}
+</template>
+
+<template name="constantDemo">
+  <h2>Constant regions</h2>
+
+  <div>
+    <input type="button" value="X++" class="x"> <br>
+    <input type="checkbox" class="remove" which="1" {{checked 1}}>
+    Remove map 1<br>
+    <input type="checkbox" class="remove" which="2" {{checked 2}}>
+    Remove map 2
+  </div>
+  <br>
+
+  <p>
+    Parts of a template can be marked as <em>constant</em>, meaning
+    that Meteor will leave the entire region alone (even as its
+    siblings change.) This is great for embedding non-Meteor
+    widgets. Try scrolling the two Google Maps embeds below. When you
+    press X++, the maps stay where they are.
+  </p>
+
+  <p>
+    Try using the checkboxes to remove either or both of the
+    maps. When you remove a map, Spark tracks the <em>identity</em> of
+    the constant regions so that it knows which DOM nodes to keep and
+    which DOM nodes to throw away. In the case of the Handlebars
+    package, the identity is based on the actual template call stack
+    that rendered the constant region.
+  </p>
+
+  X={{x}}<br>
+
+  {{#if show 1}}
+    {{#constant}}
+<div style="float: left; padding-right: 20px;">
+<iframe width="290" height="290" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=140+10th+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=140+10th+s&amp;sll=37.7577,-122.4376&amp;sspn=0.166931,0.329247&amp;ie=UTF8&amp;hq=&amp;hnear=140+10th+St,+San+Francisco,+California+94103&amp;t=m&amp;ll=37.774921,-122.415419&amp;spn=0.013569,0.017252&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=140+10th+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=140+10th+s&amp;sll=37.7577,-122.4376&amp;sspn=0.166931,0.329247&amp;ie=UTF8&amp;hq=&amp;hnear=140+10th+St,+San+Francisco,+California+94103&amp;t=m&amp;ll=37.774921,-122.415419&amp;spn=0.013569,0.017252&amp;z=14&amp;iwloc=A" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+</div>
+    {{/constant}}
+  {{/if}}
+
+  {{#if show 2}}
+    {{#constant}}
+<div>
+<iframe width="290" height="290" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=880+Harrison+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=880+harrison&amp;sll=37.7577,-122.4376&amp;sspn=0.166931,0.329247&amp;ie=UTF8&amp;hq=&amp;hnear=880+Harrison+St,+San+Francisco,+California+94107&amp;t=m&amp;ll=37.779534,-122.411213&amp;spn=0.013568,0.01708&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=880+Harrison+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=880+harrison&amp;sll=37.7577,-122.4376&amp;sspn=0.166931,0.329247&amp;ie=UTF8&amp;hq=&amp;hnear=880+Harrison+St,+San+Francisco,+California+94107&amp;t=m&amp;ll=37.779534,-122.411213&amp;spn=0.013568,0.01708&amp;z=14&amp;iwloc=A" style="color:#0000FF;text-align:left">View Larger Map</a></small>
+</div>
+    {{/constant}}
+  {{/if}}
+
+  <div class="clearboth"> </div>
+
+  X={{x}}
+</template>
+
+<template name="stateDemo">
+  <h2>Template callbacks</h2>
+
+  <p>
+    <input type="button" value="X++" class="x">
+    <input type="button" value="Y++" class="y">
+    <input type="button" value="Z++" class="z">
+  </p>
+
+  <p>
+    You can get a <em>created</em> callback when a template is
+    initially rendered; a <em>rendered</em> when a template is placed on
+    the screen and when any part of the template is redrawn; and
+    a <em>destroyed</em> callback when a template is taken across the
+    screen. All of these callbacks receive a common <em>template state
+    object</em> in 'this' which allows you to attach data to each
+    particular instance of a template.
+  </p>
+
+  <p>
+    In this case, <em>created</em> is used to create a new JavaScript
+    timer that updates the text of a &lt;span&gt; element every
+    second. <em>rendered</em> is used to find the &lt;span&gt; when it
+    appears on the screen, and update the pointer when the
+    &lt;span&gt; is redraw (say, when you press Y++ &mdash; since it
+    is not marked to be preserved.) <em>destroyed</em> is used to cancel
+    the timer when the template goes off the screen.
+  </p>
+
+  <p>
+    The template state is used to hold the current time count and a
+    reference to the &lt;span&gt; object to update. That's why there
+    can be multiple copies of the same template, each with a different
+    value for the counter.
+  </p>
+
+  X={{x}}<br>
+  <input type="button" value="Create a timer" class="create"><br>
+  {{#each timers}}
+    <div>
+      {{> timer}}
+      Z={{z}}
+    </div>
+  {{/each}}
+  X={{x}}
+</template>
+
+<template name="timer">
+  <span class="elapsed"></span>
+  <input type="button" value="Reset" class="reset">
+  <input type="button" value="Delete" class="delete">
+  Y={{y}}
+</template>
+
+<template name="d3Demo">
+  <h2>Simple d3.js integration</h2>
+  <p>
+    Meteor fits naturally with the popular d3.js data visualization
+    library by Michael Bostock. Just set up d3 from your
+    template's <em>rendered</em> callback. With Meteor, you can pass
+    data directly out of a Mongo query into d3, and your d3
+    visualization will update in realtime, with no extra code! Try
+    opening this page in two browser windows.
+  </p>
+
+  {{> circles left}}
+  {{> circles right}}
+  <div class="clearboth"> </div>
+
+</template>
+
+<template name="circles">
+<section id="circles">
+  <div class="circles">
+    {{#constant}}
+      <svg width="272" height="272"></svg>
+    {{/constant}}
+    <br>
+    {{count}} circles<br>
+    <input type="button" value="Add" class="add">
+    <input type="button" value="Remove" class="remove" {{{disabled}}}>
+    <input type="button" value="Scram" class="scram">
+    <input type="button" value="Clear" class="clear">
+  </div>
+</section>
+</template -->
+
+<!-- head>
+  <title>Todos</title>
+</head -->
+
+<body>
+  <div id="top-tag-filter">
+    {{> tag_filter}}
+  </div>
+
+  <div id="main-pane">
+    {{> todos}}
+    {{> isotope}}
+    {{> dlists}}
+    {{> ditem}}
+  </div>
+
+  <div id="side-pane">
+    {{> lists}}
+  </div>
+  
+</body>
+
+<template name="lists">
+  <h3>Todo Lists</h3>
+  {{#if loading}}
+    <div id="lists">Loading...</div>
+  {{else}}
+    <div id="lists">
+      {{#each lists}}
+        <div class="list {{selected}}">
+          {{#if editing}}
+            <div class="edit">
+              <input class="list-name-input" id="list-name-input" type="text" value="{{name}}" />
+            </div>
+          {{else}}
+            <div class="display">
+              <a class="list-name {{name_class}}" href="/{{_id}}">
+                {{name}}
+              </a>
+            </div>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+    <div id="createList">
+      <input type="text" id="new-list" placeholder="New list" />
+    </div>
+  {{/if}}
+</template>
+
+<template name="todos">
+  {{#if any_list_selected}}
+    <div id="items-view">
+      {{#if loading}}
+        Loading...
+      {{else}}
+        <div id="new-todo-box">
+          <input type="text" id="new-todo" placeholder="New item" />
+        </div>
+        <ul id="item-list">
+          {{#each todos}}
+            {{> todo_item}}
+          {{/each}}
+        </ul>
+      {{/if}}
+    </div>
+  {{/if}}
+</template>
+
+<template name="todo_item">
+  <li class="todo {{done_class}}">
+    {{#if editing}}
+      <div class="edit">
+        <input id="todo-input" type="text" value="{{text}}" />
+      </div>
+    {{else}}
+      <div class="destroy"></div>
+      <div class="display">
+        <input class="check" name="markdone" type="checkbox" {{{done_checkbox}}} />
+        <div class="todo-text">{{text}}</div>
+      </div>
+    {{/if}}
+    <div class="item-tags">
+      {{#each tag_objs}}
+        <div class="tag removable_tag">
+          <div class="name">{{tag}}</div>
+          <div class="remove"></div>
+        </div>
+      {{/each}}
+      {{#if adding_tag}}
+        <div class="tag edittag">
+          <input type="text" id="edittag-input" value="" />
+        </div>
+      {{else}}
+        <div class="tag addtag">
+          +tag
+        </div>
+      {{/if}}
+    </div>
+  </li>
+</template>
+
+<template name="tag_filter">
+  <div id="tag-filter" class="tag-list">
+    <div class="label">Show:</div>
+    {{#each tags}}
+      <div class="tag {{selected}}">
+        {{tag_text}} <span class="count">({{count}})</span>
+      </div>
+    {{/each}}
+  </div>
+</template>
+
+
+
+<template name ="isotope">
+  
+  <section id="content" class="clearfix">
+    
+      <h1>Elements Partial</h1>
+    
+
+    <section id="copy">
+  <p>Isotope&rsquo;s capabilities are designed to be used together cohesively. You can do it all &mdash; filter, sort, change layout modes, add items &mdash; and Isotope will handle it with ease.</p>
+</section>
+
+<section id="options" class="clearfix">
+
+  
+      <h3>Filters</h3>
+
+      <ul id="filters" class="option-set clearfix" data-option-key="filter">
+        <li><a href="#filter" data-option-value="*" class="selected">show all</a></li>
+        <li><a href="#filter" data-option-value=".metal">metal</a></li>
+        <li><a href="#filter" data-option-value=".transition">transition</a></li>
+        <li><a href="#filter" data-option-value=".post-transition">post-transition</a></li>
+        <li><a href="#filter" data-option-value=".nonmetal">nonmetal</a></li>
+        <li><a href="#filter" data-option-value=".inner-transition">inner-transition</a></li>
+        <li><a href="#filter" data-option-value=".alkali, .alkaline-earth">alkali and alkaline-earth</a></li>
+        <li><a href="#filter" data-option-value=":not(.transition)">not transition</a></li>
+        <li><a href="#filter" data-option-value=".metal:not(.transition)">metal but not transition</a></li>
+      </ul>
+
+
+  
+    <h3>Sort</h3>
+
+    <ul id="sort-by" class="option-set clearfix" data-option-key="sortBy">
+      <li><a href="#sortBy=original-order" data-option-value="original-order" class="selected" data>original-order</a></li>
+      <li><a href="#sortBy=name" data-option-value="name">name</a></li>
+      <li><a href="#sortBy=symbol" data-option-value="symbol">symbol</a></li>
+      <li><a href="#sortBy=number" data-option-value="number">number</a></li>
+      <li><a href="#sortBy=weight"  data-option-value="weight">weight</a></li>
+      <li><a href="#sortBy=category" data-option-value="category">category</a></li>
+      <li><a href="#sortBy=random" data-option-value="random">random</a></li>
+    </ul>
+
+    <h3>Sort direction</h3>
+
+    <ul id="sort-direction" class="option-set clearfix" data-option-key="sortAscending">
+      <li><a href="#sortAscending=true" data-option-value="true" class="selected">sort ascending</a></li>
+      <li><a href="#sortAscending=false" data-option-value="false">sort descending</a></li>
+    </ul>
+
+
+  
+    <h3>Layout modes</h3>
+
+    <ul id="layouts" class="option-set clearfix" data-option-key="layoutMode">
+      <li><a href="#masonry" data-option-value="masonry" class="selected">masonry</a></li>
+      <li><a href="#fitRows" data-option-value="fitRows">fitRows</a></li>
+      <li><a href="#cellsByRow" data-option-value="cellsByRow">cellsByRow</a></li>
+      <li><a href="#straightDown" data-option-value="straightDown">straightDown</a></li>
+      <li><a href="#masonryHorizontal" data-option-value="masonryHorizontal" class="horizontal">masonryHorizontal</a></li>
+      <li><a href="#fitColumns" data-option-value="fitColumns" class="horizontal">fitColumns</a></li>
+      <li><a href="#cellsByColumn" data-option-value="cellsByColumn" class="horizontal">cellsByColumn</a></li>
+      <li><a href="#straightAcross" data-option-value="straightAcross" class="horizontal">straightAcross</a></li>
+    </ul>
+
+
+  <h3>Etc</h3>
+
+  <ul id="etc" class="clearfix">
+    <li id="toggle-sizes"><a href="#toggle-sizes">Toggle variable sizes</a></li>
+    <li id="insert"><a href="#insert">Insert new elements</a></li>
+    <li id="append"><a href='#append'>Append new elements</a></li>
+    <li id="shuffle"><a href='#shuffle'>Shuffle</a></li>
+  </ul>
+
+</section> <!-- #options -->
+
+<div id="container" class="clickable clearfix" >
+  
+    
+        
+    <div class="element transition metal   " data-symbol="Hg" data-category="transition">
+      <p class="number">80</p>
+      <h3 class="symbol">Hg</h3>
+      <h2 class="name">Mercury</h2>
+      <p class="weight">200.59</p>
+    </div>
+  
+    
+        
+    <div class="element metalloid   " data-symbol="Te" data-category="metalloid">
+      <p class="number">52</p>
+      <h3 class="symbol">Te</h3>
+      <h2 class="name">Tellurium</h2>
+      <p class="weight">127.6</p>
+    </div>
+  
+    
+        
+    <div class="element post-transition metal   " data-symbol="Bi" data-category="post-transition">
+      <p class="number">83</p>
+      <h3 class="symbol">Bi</h3>
+      <h2 class="name">Bismuth</h2>
+      <p class="weight">208.9804</p>
+    </div>
+  
+    
+        
+    <div class="element transition metal   " data-symbol="Cd" data-category="transition">
+      <p class="number">48</p>
+      <h3 class="symbol">Cd</h3>
+      <h2 class="name">Cadmium</h2>
+      <p class="weight">112.411</p>
+    </div>
+  
+     
+    <div class="element actinoid metal inner-transition   " data-symbol="Ac" data-category="actinoid">
+      <p class="number">89</p>
+      <h3 class="symbol">Ac</h3>
+      <h2 class="name">Actinium</h2>
+      <p class="weight">(227)</p>
+    </div>
+  <!-- style="position: absolute; left: 0px; top: 0px; -webkit-transform: translate3d(5px, 5px, 0px);"  style="background: black;" -->
+    
+    <div id="inner-container" class="clone element actinoid metal inner-transition clickable clearfix " data-symbol="Ac" data-category="actinoid">
+  	  <p class="number">90</p>
+      <h3 class="symbol">Ac</h3>
+      <h2 class="name">Actinium</h2>
+      <p class="weight">(227)</p>
+      <div class="click" ></div>
+    </div>
+   
+   {{> dtodos}}	
+</div>
+<div class="option-set"> 
+   <input type="button" value="IsotopeShuffle" class="isotopeshuffle">
+   </div>
+  
+  </section> <!-- #content -->
+
+  
+</template>
+
+<!-- classes control element display e.g. metal, metalliod etc. clearfix controls the zoom of all elements, but could be used -->
+<!-- TBD may not want href="/{{_id}}" - seems to create jumpy behaviour - BTW derefences in comments!
+using URL must be something to do with using Backbone.Router. Would be OK, but why does it jump -->
+
+<template name="dlists">
+  <h3>Todo Lists</h3>
+  {{#if loading}}
+    <div id="dlists">Loading...</div>
+  {{else}}
+    <div id="dlists">
+      {{#each lists}}
+        <div class="list {{selected}} element actinoid metal inner-transition">
+            <div class="display">
+              <a class="list-name {{name_class}}" href="/{{_id}}">
+                {{name}}
+              </a>
+            </div>
+
+        </div>
+      {{/each}}
+    </div>
+    <div id="createList">
+      <input type="text" id="new-list" placeholder="New list" />
+    </div>
+  {{/if}}
+</template>
+
+<template name="dtodos">
+  {{#if any_list_selected}}
+    <div id="ditems-view">
+		<!-- the text input field in the new item in container -->
+        <div id="dnew-todo-box"  class="clone element actinoid metal inner-transition clickable clearfix ">
+          <input type="text" id="new-todo" placeholder="New item" />
+        </div>
+        
+          {{#each todos}}
+          <div id="ditems-view" class="todo-text {{selected}} clone element actinoid metalloid inner-transition clickable clearfix">
+            {{> ditem}}
+          </div>
+          {{/each}}
+        
+
+    </div>
+  {{/if}}
+</template>
+
+
+<template name="ditem">
+	  <!-- items within container if text prevents ghost item -->
+	  {{#if text}}
+        {{text}}
+       {{/if}} 
+     
+</template>
